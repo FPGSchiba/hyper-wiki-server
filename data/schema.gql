@@ -82,7 +82,7 @@ type Mutation{
 	deletePage(
 		id: ID!
 	): MutationResult!
-	deleteNoteBook(
+	deleteNotebook(
 		id: ID!
 	): MutationResult!
 	deleteFolder(

@@ -3,9 +3,8 @@ import yaml
 
 
 def get_data_dir():
-    while os.getcwd().split(os.sep)[-1] != 'src':
+    while 'src' not in os.listdir('.'):
         os.chdir('..')
-    os.chdir('..')
     if 'data' in os.listdir('.'):
         return os.path.join(os.getcwd(), 'data')
     else:
