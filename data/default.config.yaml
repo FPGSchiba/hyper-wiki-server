@@ -1,0 +1,2 @@
+graph:
+  schema: '{data-dir}/schema.gql'

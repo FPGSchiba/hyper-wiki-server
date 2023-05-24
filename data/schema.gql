@@ -1,0 +1,239 @@
+type Query{
+	page(
+		id: String!
+		location: String
+		name: String
+	): Page!
+	folder(
+		id: String!
+		name: String
+		location: String
+	): Folder!
+	notebook(
+		id: String!
+		name: String
+	): Notebook!
+	pageVersion(
+		id: String!
+		name: String
+	): PageVersion!
+	graph(
+		id: String!
+	): Graph!
+	node(
+		id: String!
+	): Node!
+	edge(
+		id: String!
+	): Edge!
+	pages(
+		name: String
+		location: String
+	): [Page]
+	folders(
+		name: String
+		location: String
+	): [Folder]
+	notebooks(
+		name: String
+	): [Notebook]
+	pageVersions(
+		name: String
+		content: String
+	): [PageVersion]
+	nodes(
+		name: String
+	): [Node]
+	edges(
+		name: String
+		keyword: String
+	): [Edge]
+}
+
+type Mutation{
+	createPage(
+		input: CreatePage!
+	): MutationResult!
+	createNotebook(
+		input: CreateNotebook!
+	): MutationResult!
+	createFolder(
+		input: CreateFolder!
+	): MutationResult!
+	createPageVersion(
+		input: CreatePageVersion!
+	): MutationResult!
+	updatePage(
+		input: UpdatePage!
+		id: ID!
+	): MutationResult!
+	updateNotebook(
+		input: UpdateNotebook!
+		id: ID!
+	): MutationResult!
+	updateFolder(
+		id: ID!
+		input: UpdateFolder!
+	): MutationResult!
+	updatePageVersion(
+		id: ID!
+		input: UpdatePageVersion!
+	): MutationResult!
+	deletePage(
+		id: ID!
+	): MutationResult!
+	deleteNoteBook(
+		id: ID!
+	): MutationResult!
+	deleteFolder(
+		id: ID!
+	): MutationResult!
+	deletePageVersion(
+		id: ID!
+	): MutationResult!
+}
+
+type MutationResult{
+	error: Boolean!
+	message: String!
+}
+
+"""
+A Page Containing versions of itsself with information
+"""
+type Page{
+	id: ID!
+	location: String!
+	versions: [PageVersion]
+}
+
+"""
+A Folder, which holds Pages
+"""
+type Folder{
+	id: ID!
+	pages: [Page]
+	name: String!
+	location: String!
+}
+
+"""
+A Notebook, which holds a collection of Folders and Pages
+"""
+type Notebook{
+	id: ID!
+	pages: [Page]
+	folders: [Folder]
+	name: String!
+	permissions: [Permission]
+	graph: Graph
+}
+
+"""
+A PageVersion, so a single Version of a Page containing written Information
+"""
+type PageVersion{
+	id: ID!
+	content: String
+	version: Int!
+	permissions: [Permission]
+	name: String!
+}
+
+"""
+The graph represents a multitude of Nodes, which build a map of nodes and edges
+"""
+type Graph{
+	id: ID!
+	nodes: [Node]
+}
+
+"""
+A node represents a PageVersion within a graph
+"""
+type Node{
+	id: ID!
+	page: PageVersion!
+	edges: [Edge!]
+}
+
+"""
+A connection between one or multiple PageVersions to display a textual connection between the contents of those pages
+"""
+type Edge{
+	id: ID!
+	name: String
+	keywords: [String]
+}
+
+"""
+The rights available to have in order to access pages and notebooks
+"""
+enum Right{
+	write
+	read
+	control
+}
+
+input CreatePage{
+	name: String!
+	location: String!
+	version: String
+	permissions: [PermissionInput]
+}
+
+input CreateNotebook{
+	name: String!
+	permissions: [PermissionInput]
+}
+
+interface Permission{
+	id: ID!
+	principals: [String!]
+	right: Right!
+}
+
+input PermissionInput{
+	principals: [String!]
+	right: Right
+}
+
+input CreateFolder{
+	name: String!
+	location: String!
+}
+
+input CreatePageVersion{
+	content: String
+	version: Int!
+	permissions: [PermissionInput]
+	name: String!
+}
+
+input UpdatePage{
+	location: String
+	pageVersions: [ID]
+}
+
+input UpdateNotebook{
+	pages: [ID]
+	folders: [ID]
+	name: String
+	permissions: [PermissionInput]
+}
+
+input UpdateFolder{
+	name: String
+	pages: [ID]
+}
+
+input UpdatePageVersion{
+	content: String
+	version: Int
+	permissions: [PermissionInput]
+	name: String
+}
+schema{
+	query: Query,
+	mutation: Mutation
+}
