@@ -1,2 +1,11 @@
 graph:
   schema: '{data-dir}/schema.gql'
+  port: 3003
+  host: '0.0.0.0'
+socket:
+  port: 3004
+  host: '0.0.0.0'
+db:
+  endpoint: ''
+  access_key: ''
+  secret_key: ''

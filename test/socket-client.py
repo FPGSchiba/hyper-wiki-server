@@ -1,7 +1,8 @@
 import socketio
 
 # standard Python
-sio = socketio.Client(logger=True, engineio_logger=True)
+# sio = socketio.Client(logger=True, engineio_logger=True)
+sio = socketio.Client()
 
 
 @sio.event
